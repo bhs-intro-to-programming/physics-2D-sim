@@ -105,11 +105,6 @@ const animate = (drawFrame) => {
     }
   };
 
-  document.documentElement.onclick = (e) => {
-    running = !running;
-    maybeStep();
-  };
-
   maybeStep();
 };
 
