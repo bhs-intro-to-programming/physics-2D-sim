@@ -1,25 +1,21 @@
-let ctx;
-let width;
-let height;
-
-let onclick = (x, y) => { };
-let onkeydown = (k) => { };
+//let onclick = (x, y) => {};
+let onkeydown = (k) => {};
 
 document.onkeydown = (e) => {
   onkeydown(e.key);
 };
 
-const registerOnclick = (fn) => (onclick = fn);
+//const registerOnclick = (fn) => (onclick = fn);
 const registerOnKeyDown = (fn) => (onkeydown = fn);
 
 const setCanvas = (canvas) => {
-  canvas.onclick = (e) => onclick(e.offsetX, e.offsetY);
-  ctx = canvas.getContext('2d');
-  width = canvas.width;
-  height = canvas.height;
+  const ctx = canvas.getContext('2d');
+  const width = canvas.width;
+  const height = canvas.height;
+  return { ctx, width, height };
 };
 
-const drawLine = (x1, y1, x2, y2, color, width = 1) => {
+const drawLine = (x1, y1, x2, y2, color, width, ctx) => {
   ctx.strokeStyle = color;
   ctx.lineWidth = width;
   ctx.beginPath();
@@ -28,7 +24,7 @@ const drawLine = (x1, y1, x2, y2, color, width = 1) => {
   ctx.stroke();
 };
 
-const drawCircle = (x, y, r, color, lineWidth = 1) => {
+const drawCircle = (x, y, r, color, lineWidth = 1, ctx) => {
   ctx.strokeStyle = color;
   ctx.lineWidth = lineWidth;
   ctx.beginPath();
@@ -36,13 +32,13 @@ const drawCircle = (x, y, r, color, lineWidth = 1) => {
   ctx.stroke();
 };
 
-const drawRect = (x, y, width, height, color, lineWidth = 1) => {
+const drawRect = (x, y, width, height, color, lineWidth = 1, ctx) => {
   ctx.strokeStyle = color;
   ctx.lineWidth = lineWidth;
   ctx.strokeRect(x, y, width, height);
 };
 
-const drawTriangle = (x1, y1, x2, y2, x3, y3, color, lineWidth = 1) => {
+const drawTriangle = (x1, y1, x2, y2, x3, y3, color, lineWidth = 1, ctx) => {
   ctx.strokeStyle = color;
   ctx.lineWidth = lineWidth;
   ctx.beginPath();
@@ -53,19 +49,19 @@ const drawTriangle = (x1, y1, x2, y2, x3, y3, color, lineWidth = 1) => {
   ctx.stroke();
 };
 
-const drawFilledCircle = (x, y, r, color) => {
+const drawFilledCircle = (x, y, r, color, ctx) => {
   ctx.fillStyle = color;
   ctx.beginPath();
   ctx.ellipse(x, y, r, r, 0, 0, 2 * Math.PI);
   ctx.fill();
 };
 
-const drawFilledRect = (x, y, width, height, color) => {
+const drawFilledRect = (x, y, width, height, color, ctx) => {
   ctx.fillStyle = color;
   ctx.fillRect(x, y, width, height);
 };
 
-const drawFilledTriangle = (x1, y1, x2, y2, x3, y3, color) => {
+const drawFilledTriangle = (x1, y1, x2, y2, x3, y3, color, ctx) => {
   ctx.fillStyle = color;
   ctx.beginPath();
   ctx.moveTo(x1, y1);
@@ -76,7 +72,17 @@ const drawFilledTriangle = (x1, y1, x2, y2, x3, y3, color) => {
 };
 
 //topLeft, topRight, bottomLeft, bottomRight are all radii for circles in those corners, only positive integer values
-const drawRoundedRect = (x, y, width, height, topLeft, topRight, bottomLeft, bottomRight, color) => {
+const drawRoundedRect = (
+  x,
+  y,
+  width,
+  height,
+  topLeft,
+  topRight,
+  bottomLeft,
+  bottomRight,
+  color,
+) => {
   const arrOfRadii = [topLeft, topRight, bottomLeft, bottomRight];
   ctx.fillStyle = color;
   ctx.beginPath();
@@ -84,7 +90,17 @@ const drawRoundedRect = (x, y, width, height, topLeft, topRight, bottomLeft, bot
   ctx.stroke();
 };
 
-const drawFilledRoundedRect = (x, y, width, height, topLeft, topRight, bottomLeft, bottomRight, color) => {
+const drawFilledRoundedRect = (
+  x,
+  y,
+  width,
+  height,
+  topLeft,
+  topRight,
+  bottomLeft,
+  bottomRight,
+  color,
+) => {
   const arrOfRadii = [topLeft, topRight, bottomLeft, bottomRight];
   ctx.fillStyle = color;
   ctx.beginPath();
@@ -93,13 +109,13 @@ const drawFilledRoundedRect = (x, y, width, height, topLeft, topRight, bottomLef
   ctx.fill();
 };
 
-const drawText = (text, x, y, color, size) => {
-  ctx.font = `${size}px Lexend`;
+const drawText = (text, x, y, color, size, ctx) => {
+  //ctx.font = `${size}px Lexend`;
   ctx.fillStyle = color;
   ctx.fillText(text, x, y);
 };
 
-const clear = () => ctx.clearRect(0, 0, width, height);
+const clear = (ctx, width, height) => ctx.clearRect(0, 0, width, height, ctx);
 
 /*
  * Available to script as convenience.
@@ -123,11 +139,6 @@ const animate = (drawFrame) => {
     }
   };
 
-  document.documentElement.onclick = (e) => {
-    running = !running;
-    maybeStep();
-  };
-
   maybeStep();
 };
 
@@ -144,10 +155,7 @@ export {
   drawFilledRoundedRect,
   drawText,
   clear,
-  width,
-  height,
   now,
   animate,
-  registerOnclick,
   registerOnKeyDown,
 };
