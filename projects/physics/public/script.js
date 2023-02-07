@@ -233,8 +233,13 @@ const drawFrame = (time) => {
   if (time > next && animateStart) {
     clear();
     for (const shape of objArray) {
-      //shape.center.x += 10
-      //shape.center.y += 10
+
+      const movement = getDisplacement(shape.actingForce, shape.mass, )
+
+      shape.center.x += 0
+
+      shape.center.y += 10
+
       shape.rotation = countFrame;
 
       shape.updateProperties();
