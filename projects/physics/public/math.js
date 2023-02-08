@@ -90,21 +90,32 @@ const distance = (p1, p2) => {
   return Math.hypot(Math.abs(p1.x - p2.x), Math.abs(p1.y - p2.y));
 };
 
+//general calculus stuff, only for polynomials. coefficients is an array where coefficient[i] corresponds to
+//the coefficient of x raised to the i. For example, [0, 0, 1] corresponds to the function f(x) = x^2
+const findDerivative = (coefficients) => {
+  const derivativeCoefficients = [];
+  for (let i = 0; i < coefficients.length - 1; i++) {
+    derivativeCoefficients.push(coefficients[i + 1] * (i + 1));
+  };
+  return derivativeCoefficients;
+};
+
+const findAntiderivative = (coefficients, constant) => {
+  const antiderivativeCoefficients = [constant];
+  for (let i = 0; i < coefficients.length; i++) {
+    antiderivativeCoefficients.push(coefficients[i] / (i + 1));
+  };
+  return antiderivativeCoefficients;
+};
+
 //time derivative(s)
-const getAcceleration = (forceVector, mass, appliedTime) => {
-  return (forceVector.magnitude / mass) * appliedTime;
-};
+const getAcceleration = (shape) => {
 
-const getVelocity = (forceVector, mass, appliedTime, fps) => {
-  getAcceleration(forceVector.magnitude, mass, appliedTime) * (1 / fps);
-};
+}
 
-const getDisplacement = (forceVector, mass, appliedTime, fps) => {
-  const h = (getVelocity(forceVector.magnitude, mass, appliedTime, fps) * 1) / fps;
-  const p = Math.cos(Math.PI / 2 - forceVector.angle) * h;
-  const b = Math.sqrt(h ** 2 - p ** 2);
-  return { xChange: Math.round(b), yChange: Math.round(p) };
-};
+const getForce = (shape) => {
+  return shape.velocity
+}
 
 export {
   add2Vectors,
