@@ -90,12 +90,23 @@ const distance = (p1, p2) => {
   return Math.hypot(Math.abs(p1.x - p2.x), Math.abs(p1.y - p2.y));
 };
 
+x => 1*x**2 + 1*x + 1
 //general calculus stuff, only for polynomials. coefficients is an array where coefficient[i] corresponds to
 //the coefficient of x raised to the i. For example, [0, 0, 1] corresponds to the function f(x) = x^2
 const findDerivative = (coefficients) => {
+  let largestDegree = 0
+  for (let i = 0; i < coefficients.length; i++) {
+    if (coefficients[i].degree > largestDegree) {
+      largestDegree = coefficients[i].degree
+    }
+  }
   const derivativeCoefficients = [];
-  for (let i = 0; i < coefficients.length - 1; i++) {
-    derivativeCoefficients.push(coefficients[i + 1] * (i + 1));
+  for (let i = 0; i < largestDegree; i++) {
+    if (coefficients[i].degree === i) {
+      derivativeCoefficients.push({ constant: coefficients[i + 1].constant * (i + 1), degree: i});
+    } else {
+      derivativeCoefficients.push({ constant: 0, degree: i});
+    };
   };
   return derivativeCoefficients;
 };
@@ -110,12 +121,20 @@ const findAntiderivative = (coefficients, constant) => {
 
 //time derivative(s)
 const getAcceleration = (shape) => {
-
+  const derivative = findDerivative([shape.currVelocity.magnitude])
+  return { angle: shape.currVelocity.angle, magnitude: derivative }
 }
 
 const getForce = (shape) => {
   return shape.velocity
 }
+
+function getDisplacement() {
+  const magnitude = this.currVelocity.magnitude
+  const xChange = Math.cos(this.currVelocity.angle) * magnitude * secondsPerFrame;
+  const yChange = Math.sin(this.currVelocity.angle) * magnitude * secondsPerFrame;
+  return { xChange, yChange };
+};
 
 export {
   add2Vectors,
