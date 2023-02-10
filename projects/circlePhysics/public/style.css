@@ -1,0 +1,15 @@
+* {
+  margin: 10px auto;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  text-align: center;
+}
+canvas {
+  border: 1px dotted grey;
+}
+
+

@@ -34,6 +34,7 @@ import { Menu, shapeMenu } from './gui.js';
 import { makeNSidedPolygon } from './perfectShapes.js';
 
 const canvas = document.getElementById('screen');
+
 const canvasProps = setCanvas(canvas);
 
 const width = canvasProps.width;
