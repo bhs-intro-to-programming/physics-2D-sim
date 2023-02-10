@@ -10,8 +10,7 @@ const makeNSidedPolygon = (n, center, radius, startingVector) => {
       x: center.x + Math.cos(angleBetweenPoints * i) * radius,
       y: center.y + Math.sin(angleBetweenPoints * i) * radius,
     });
-  }
-  console.log(vertices);
+  };
   return new Shape(
     startingVector,
     vertices,

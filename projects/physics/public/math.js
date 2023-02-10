@@ -90,7 +90,6 @@ const distance = (p1, p2) => {
   return Math.hypot(Math.abs(p1.x - p2.x), Math.abs(p1.y - p2.y));
 };
 
-x => 1*x**2 + 1*x + 1
 //general calculus stuff, only for polynomials. coefficients is an array where coefficient[i] corresponds to
 //the coefficient of x raised to the i. For example, [0, 0, 1] corresponds to the function f(x) = x^2
 const findDerivative = (coefficients) => {
@@ -98,8 +97,8 @@ const findDerivative = (coefficients) => {
   for (let i = 0; i < coefficients.length; i++) {
     if (coefficients[i].degree > largestDegree) {
       largestDegree = coefficients[i].degree
-    }
-  }
+    };
+  };
   const derivativeCoefficients = [];
   for (let i = 0; i < largestDegree; i++) {
     if (coefficients[i].degree === i) {
@@ -111,23 +110,22 @@ const findDerivative = (coefficients) => {
   return derivativeCoefficients;
 };
 
-const findAntiderivative = (coefficients, constant) => {
-  const antiderivativeCoefficients = [constant];
-  for (let i = 0; i < coefficients.length; i++) {
-    antiderivativeCoefficients.push(coefficients[i] / (i + 1));
-  };
-  return antiderivativeCoefficients;
+//time derivative(s), should be used as methods
+/*
+function getAccelfromVelo() {
+  const angle = this.currVelocity.angle;
+  const currVeloMagnitude = this.currVelocity.magnitude;
+  const lastVeloMagnitude = this.lastVelocity.magnitude;
+  if (currVeloMagnitude !== lastVeloMagnitude) {
+    const derivative = findDerivative([{ constant: Math.abs(lastVeloMagnitude - currVeloMagnitude), degree: 1}]);
+    return { angle, magnitude: derivative * secondsPerFrame };
+  } else {
+    return { angle, magnitude: 0 };
 };
 
-//time derivative(s)
-const getAcceleration = (shape) => {
-  const derivative = findDerivative([shape.currVelocity.magnitude])
-  return { angle: shape.currVelocity.angle, magnitude: derivative }
-}
-
-const getForce = (shape) => {
-  return shape.velocity
-}
+function getAccelfromForce() {
+  return (this.actingForce / this.mass) * secondsPerFrame;
+};
 
 function getDisplacement() {
   const magnitude = this.currVelocity.magnitude
@@ -135,7 +133,7 @@ function getDisplacement() {
   const yChange = Math.sin(this.currVelocity.angle) * magnitude * secondsPerFrame;
   return { xChange, yChange };
 };
-
+*/
 export {
   add2Vectors,
   vectorMultiply,
@@ -148,19 +146,8 @@ export {
   geoMean,
   twoPointAngle,
   distance,
-  getAcceleration,
-  getVelocity,
-  getDisplacement,
+  findDerivative,
   vector,
   twoPointXYDif,
   shapeArea,
 };
-
-//Verlet Integration, don't worry about this for now (I gotta take Calc BC now xD)
-/*
-last_acceleration = acceleration
-position += velocity * time_step + ( 0.5 * last_acceleration * time_step^2 )
-new_acceleration = force / mass 
-avg_acceleration = ( last_acceleration + new_acceleration ) / 2
-velocity += avg_acceleration * time_step
-*/
