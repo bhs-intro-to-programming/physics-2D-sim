@@ -128,11 +128,12 @@ function getAccelfromForce() {
 };
 
 function getDisplacement() {
-  const magnitude = this.currVelocity.magnitude
-  const xChange = Math.cos(this.currVelocity.angle) * magnitude * secondsPerFrame;
-  const yChange = Math.sin(this.currVelocity.angle) * magnitude * secondsPerFrame;
+  const magnitude = this.currVelocity.magnitude * secondsPerFrane
+  const xChange = Math.cos(this.currVelocity.angle) * magnitude;
+  const yChange = Math.sin(this.currVelocity.angle) * magnitude;
   return { xChange, yChange };
 };
+
 */
 export {
   add2Vectors,
