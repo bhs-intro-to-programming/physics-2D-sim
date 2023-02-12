@@ -15,6 +15,7 @@ const makeNSidedPolygon = (n, center, radius, startingVector) => {
     startingVector,
     vertices,
     shapeArea(vertices) * document.getElementById('density').value,
+    `${n}-sided Polygon`
   );
 };
 
