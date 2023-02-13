@@ -212,6 +212,13 @@ const onclick = (x, y) => {
   }
 };
 
+const drawPerfectShapes = (n, x, y, r) => {
+  const points = makeNSidedPolygon(n, { x, y }, r)
+  for (let i = 0; i < n; i++) {
+    onclick(points.x, points.y)
+  };
+};
+
 registerOnKeyDown((k) => {
   if (k === 'Enter') {
     if (paused) {
@@ -275,9 +282,9 @@ const drawFrame = (time) => {
     clear(ctx, width, height);
     for (const shape of objArray) {
       shape.menu.updateWindow(shape.getShapeVars());
-
-      const movement = getDisplacement(shape.actingForce, shape.mass, );
-
+/* this part was handled by ion, I'm just here to do the math :P
+      const movement = getDisplacement(shape.actingForce, shape.mass,);
+*/
       shape.center.x += 0;
 
       shape.center.y += 10;
