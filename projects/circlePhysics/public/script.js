@@ -44,7 +44,17 @@ drawFilledRect(0, 0, width, height, Theme.background)
 let ObjArray = []
 let CircleCoords = []
 let animateStart = false
-const msecPerFrame = 10
+const msecPerFrame = 100
+
+
+const rotate = (cx, cy, x, y, angle) => {
+  let radians = (Math.PI / 180) * angle,
+    cos = Math.cos(radians),
+    sin = Math.sin(radians),
+    nx = cos * (x - cx) + sin * (y - cy) + cx,
+    ny = cos * (y - cy) - sin * (x - cx) + cy;
+  return [nx, ny];
+};
 
 class Shape {
   constructor(radius, activeVelocity, x, y) {
@@ -61,6 +71,11 @@ class Shape {
   draw() {
     drawCircle(this.x, this.y, this.radius, Theme.draw, 1)
     drawFilledCircle(this.x, this.y, 2, Theme.accents)
+  }
+  
+  drawVector(vector, color, width){
+    const point = rotate(this.x, this.y, (this.x+vector.magnitude), this.y, radToDeg(-vector.angle));
+    drawLine(this.x, this.y, point[0], point[1], color, width);
   }
 
   /* // sorry sze ting i wont be using this for the time being
@@ -88,12 +103,20 @@ class Shape {
       index++
     }
     const totalForce = [vector(0,0)]
-    if (collisions.length > 0) console.log('collsions', collisions)
-    for (const element of collisions) {
-      const elementMomentum = vector(element.angle, element.source.mass * element.source.velocity.magnitude)
-      totalForce.push(elementMomentum)
+    if (collisions.length > 0) {
+      console.log("-----------")
+      for (const element of collisions) {
+        const elementMomentum = vector(element.angle, element.source.mass * element.source.currVelocity.magnitude)
+        console.log("elmomentum: " + JSON.stringify(elementMomentum))
+        console.log("el mass " + element.source.mass + " el vel " + JSON.stringify(element.source.currVelocity.magnitude))
+        totalForce.push(vectorMultiply(elementMomentum, -1))
+      }
+      console.log("collided: pre force;  "  + JSON.stringify(this.force))
+      console.log("total force: " + JSON.stringify(totalForce))
+      this.force = addNumVectors(totalForce);
+      console.log("new force " + JSON.stringify(this.force))
+      console.log("-----------")
     }
-    console.log(totalForce)
     this.force = addNumVectors(totalForce)
   }
 
@@ -118,6 +141,7 @@ class Shape {
   updateAccelfromForce() {
     const decForce = vector(this.force.angle, (this.force.magnitude / this.mass) * msecPerFrame / 1000);
     this.currAcc = add2Vectors(this.currAcc, decForce)
+    console.log(JSON.stringify(this.currAcc) + " accel")
   };
 
   updatePosition() {
@@ -182,7 +206,10 @@ const nextFrame = (time) => {
       element.updateAccelfromForce()
       element.currVelocity = add2Vectors(element.currVelocity, vector(element.currAcc.angle, element.currAcc.magnitude / msecPerFrame / 1000))
       element.updatePosition()
-      element.draw()
+      element.draw();
+      element.drawVector(element.force, "white", 5);
+      element.drawVector(element.currAcc, "green", 2);
+      element.drawVector(element.currVelocity, "blue", 1);
       index++
     }
     console.log(ObjArray)
