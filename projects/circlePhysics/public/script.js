@@ -98,18 +98,19 @@ class Shape {
       const angle = twoPointAngle({ x: this.x, y: this.y }, { x: element.x, y: element.y })
       //if (dist > 0) console.log('distance:', dist)
       if ((this.radius + element.radius >= dist) && (dist != 0)) {
-        collisions.push({ source: element, index: index, angle, dist })
+        const collisionPos = {angle, dist: dist-element.radius}
+        collisions.push({ source: element, index: index, angle, dist, collisionPos, })
       }
       index++
     }
     const totalForce = [vector(0,0)]
 
     for (const element of collisions) {
-      const elementMomentum = vector(element.angle, element.source.mass * element.source.currVelocity.magnitude)
+      const elementMomentum = vector(element.angle, element.source.mass * element.source.currVelocity.magnitude - this.mass* this.currVelocity.magnitude)
       totalForce.push(elementMomentum)
     }
     console.log(totalForce)
-    this.force = vectorMultiply(addNumVectors(totalForce),-1)
+    this.force = vectorMultiply(addNumVectors(totalForce), 1)
     return collisions
   }
 
