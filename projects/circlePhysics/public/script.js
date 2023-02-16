@@ -106,11 +106,12 @@ class Shape {
     const totalForce = [vector(0,0)]
 
     for (const element of collisions) {
-      const elementMomentum = vector(element.angle, element.source.mass * element.source.currVelocity.magnitude - this.mass* this.currVelocity.magnitude)
-      totalForce.push(elementMomentum)
+      const thisMomentum = vector(this.currVelocity.angle, this.mass * this.currVelocity.magnitude)
+      const elementMomentum = vector(element.source.currVelocity.angle, element.source.mass * element.source.currVelocity.magnitude)
+      totalForce.push(add2Vectors(thisMomentum, elementMomentum))
     }
     console.log(totalForce)
-    this.force = vectorMultiply(addNumVectors(totalForce), 1)
+    this.force = vectorMultiply(addNumVectors(totalForce), -1)
     return collisions
   }
 
