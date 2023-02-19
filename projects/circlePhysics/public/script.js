@@ -98,21 +98,20 @@ class Shape {
       const angle = twoPointAngle({ x: this.x, y: this.y }, { x: element.x, y: element.y })
       //if (dist > 0) console.log('distance:', dist)
       if ((this.radius + element.radius >= dist) && (dist != 0)) {
-        const collisionPos = {perpendicular: angle + Math.PI/2, dist: dist-element.radius}
+        const collisionPos = {perpendicular: angle + Math.PI/2, dist: dist-element.radius, coords: {x: this.x + Math.cos(angle) * dist-element.radius, y: this.y + Math.sin(angle) * dist-element.radius }}
         collisions.push({ source: element, index: index, angle, dist, collisionPos, })
       }
       index++
     }
     const totalForce = [vector(0,0)]
-
+    //vector(this.currVelocity.angle, (this.currVelocity.magnitude / element.source.mass - element.source.currVelocity.magnitude + this.mass )
     for (const element of collisions) {
-      //const 
-      
-      /*const thisMomentum = vector(this.currVelocity.angle, this.mass * this.currVelocity.magnitude)
-      const elementMomentum = vector((element.source.currVelocity.angle + Math.PI + element.angle), element.source.mass * element.source.currVelocity.magnitude)
-      let exertedForce = add2Vectors(thisMomentum, elementMomentum)
-      exertedForce.angle = (element.angle)
-      totalForce.push(exertedForce)*/
+      // change velocity and acceleration too, by some amount
+      // we could also cut out the force middleman by not allowing change in density and having all of them the same
+      totalForce.push(add2Vectors(
+          vector(this.currVelocity.angle, this.currVelocity.magnitude * this.mass),
+          vector() // get from the point of collision and the object's velocity
+        ))
     }
     console.log(totalForce)
     this.force = addNumVectors(totalForce)
@@ -120,6 +119,7 @@ class Shape {
   }
 
   collPos(array){
+    // this is heavily tested and deemed to be functional
     for (const element of array){
     const moveBase = element.dist - 2
     this.y += Math.sin(element.angle) * ((moveBase - (this.radius + element.source.radius))/2)
@@ -152,7 +152,7 @@ class Shape {
   };
 
   updateVelocity() {
-    this.currVelocity = add2Vectors(this.currVelocity, vector(this.currAcc.angle, this.currAcc.magnitude / (msecPerFrame)))
+    this.currVelocity = add2Vectors(this.currVelocity, vector(this.currAcc.angle, this.currAcc.magnitude / (msecPerFrame/1000)))
     this.currAcc.angle = (this.currAcc.angle + this.currVelocity.angle) / 2
   }
 
