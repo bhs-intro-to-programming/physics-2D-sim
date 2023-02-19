@@ -98,7 +98,7 @@ class Shape {
       const angle = twoPointAngle({ x: this.x, y: this.y }, { x: element.x, y: element.y })
       //if (dist > 0) console.log('distance:', dist)
       if ((this.radius + element.radius >= dist) && (dist != 0)) {
-        const collisionPos = {angle, dist: dist-element.radius}
+        const collisionPos = {perpendicular: angle + Math.PI/2, dist: dist-element.radius}
         collisions.push({ source: element, index: index, angle, dist, collisionPos, })
       }
       index++
@@ -106,11 +106,13 @@ class Shape {
     const totalForce = [vector(0,0)]
 
     for (const element of collisions) {
-      const thisMomentum = vector(this.currVelocity.angle, this.mass * this.currVelocity.magnitude)
+      //const 
+      
+      /*const thisMomentum = vector(this.currVelocity.angle, this.mass * this.currVelocity.magnitude)
       const elementMomentum = vector((element.source.currVelocity.angle + Math.PI + element.angle), element.source.mass * element.source.currVelocity.magnitude)
       let exertedForce = add2Vectors(thisMomentum, elementMomentum)
       exertedForce.angle = (element.angle)
-      totalForce.push(exertedForce)
+      totalForce.push(exertedForce)*/
     }
     console.log(totalForce)
     this.force = addNumVectors(totalForce)
@@ -119,9 +121,9 @@ class Shape {
 
   collPos(array){
     for (const element of array){
-      const moveBase = element.dist - 1
-    this.y += Math.cos(element.angle) * (moveBase - (this.radius + element.source.radius))
-    this.x += Math.sin(element.angle) * (moveBase - (this.radius + element.source.radius))
+    const moveBase = element.dist - 2
+    this.y += Math.sin(element.angle) * ((moveBase - (this.radius + element.source.radius))/2)
+    this.x += Math.cos(element.angle) * ((moveBase - (this.radius + element.source.radius))/2)
     }
   }
 

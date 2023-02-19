@@ -11,5 +11,5 @@ const app = express();
 app.use(express.static('public'));
 
 app.listen(port, function () {
-  console.log(`Listening on port ${this.address().port}`);
+  console.log(`Listening on port ${this.address().port} (localhost:${this.address().port})`);
 }); 
