@@ -99,7 +99,8 @@ class Shape {
       //if (dist > 0) console.log('distance:', dist)
       if ((this.radius + element.radius >= dist) && (dist != 0)) {
         const collisionPos = {perpendicular: angle + Math.PI/2, dist: dist-element.radius, coords: {x: this.x + Math.cos(angle) * dist-element.radius, y: this.y + Math.sin(angle) * dist-element.radius }}
-        collisions.push({ source: element, index: index, angle, dist, collisionPos, })
+        const velocityThings = {xPortion:  Math.cos(this.currVelocity.angle) * this.currVelocity.magnitude, yPortion: Math.sin(this.currVelocity.angle) * this.currVelocity.magnitude}
+        collisions.push({ source: element, index: index, angle, dist, collisionPos, velocityThings})
       }
       index++
     }
