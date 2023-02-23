@@ -12,9 +12,13 @@
 </head>
 
 <label for="density"> Density (constant), kg/pixel:</label>
-<input type="number" id="density" name="density" value="100" min="0">
-<!-- stolen from mdn xd trolled diots https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/number-->
+<input type="number" id="density" name="density" value="1" min="0">
+<!-- stolen from mdn xd trolled diots https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/number -->
 
+<!-- couldnt figure this out
+<label for="framerate"> --- frequency - 1-5000 ms/frame :</label>
+<input type="number" id="framerate" name="framerate" value="100" min="1" max="5000">
+-->
 <body>
   <canvas id="screen" width="1200" height="700"></canvas>
 </body>
