@@ -3,8 +3,8 @@ const shapeArea = (vArray) => {
   return sigma(0, vArray.length - 2, (i) => vArray[i].x * vArray[i + 1].y - vArray[i + 1].x * vArray[i].y) / 2;
 }
 
-const vector = (degrees, magnitude) => {
-  return { angle: (degrees * Math.PI) / 180, magnitude };
+const vector = (radians, magnitude) => {
+  return { angle: radians, magnitude };
 };
 
 const add2Vectors = (v1, v2) => {
@@ -14,7 +14,11 @@ const add2Vectors = (v1, v2) => {
   const y2 = Math.sin(v2.angle) * v2.magnitude;
   const angle = Math.atan2(y1 + y2, x1 + x2);
   const magnitude = Math.hypot(x1 - x2, y1 - y2);
-  return { angle, magnitude };
+  if (magnitude === 0) {
+    return vector(0, 0)
+  } else {
+    return { angle, magnitude };
+  }
 };
 
 const vectorMultiply = (vector, n) => {
@@ -26,9 +30,12 @@ const vectorMultiply = (vector, n) => {
 };
 
 const addNumVectors = (vectors) => {
-  return vectors.reduce((acc, x) => add2Vectors(acc, x), vector(0, 0));
+  if (vectors.length === 1) {
+    return vectors[0]
+  } else {
+    return vectors.reduce((acc, x) => add2Vectors(acc, x), vector(0, 0));
+  }
 };
-
 //general math functions
 /* this part is not done, still can merge though
 const overRange = (start, end, funct, startValue) => {
@@ -38,8 +45,8 @@ const overRange = (start, end, funct, startValue) => {
 };
 */
 
-const twoPointXYDif = (p1, p2) =>{ 
-  return { xDif: (p1.x - p2.x), yDif: (p1.y - p2.y) }; 
+const twoPointXYDif = (p1, p2) => {
+  return { xDif: (p1.x - p2.x), yDif: (p1.y - p2.y) };
 };
 
 const sigma = (start, end, funct) => {
@@ -83,8 +90,26 @@ const twoPointDistance = (p1, p2) => {
   return Math.hypot(Math.abs(p1.x - p2.x), Math.abs(p1.y - p2.y));
 };
 
-const twoShapeGrav = (o1, o2) => (6.6743 * 10 ** -11)  * o1.mass * o2.mass / distance(o1, o2) ** 2
+const twoShapeGrav = (o1, o2) => (6.6743 * 10 ** -11) * o1.mass * o2.mass / twoPointDistance(o1, o2) ** 2
 //time derivative(s)
+
+const findDerivative = (coefficients) => {
+  let largestDegree = 0
+  for (let i = 0; i < coefficients.length; i++) {
+    if (coefficients[i].degree > largestDegree) {
+      largestDegree = coefficients[i].degree
+    };
+  };
+  const derivativeCoefficients = [];
+  for (let i = 0; i < largestDegree; i++) {
+    if (coefficients[i].degree === i) {
+      derivativeCoefficients.push({ constant: coefficients[i + 1].constant * (i + 1), degree: i });
+    } else {
+      derivativeCoefficients.push({ constant: 0, degree: i });
+    };
+  };
+  return derivativeCoefficients;
+};
 
 export {
   add2Vectors,
@@ -102,6 +127,7 @@ export {
   twoPointXYDif,
   shapeArea,
   twoShapeGrav,
+  findDerivative,
 };
 
 //Verlet Integration, don't worry about this for now (I gotta take Calc BC now xD)

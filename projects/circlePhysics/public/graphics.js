@@ -93,7 +93,7 @@ const now = () => performance.now();
  */
 const animate = (drawFrame) => {
   let running = true;
-
+  
   const step = () => {
     drawFrame(performance.now());
     maybeStep();
